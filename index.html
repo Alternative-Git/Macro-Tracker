@@ -316,7 +316,7 @@ Rules: fuzzy name match pantry items; convert units (1lb=16oz,1cup=8oz); for "I 
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:systemPrompt,messages:[{role:'user',content:input}]})
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:600,system:systemPrompt,messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     const raw=data.content?.[0]?.text||'{}';
@@ -596,7 +596,7 @@ async function lookupNutrition(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:200,
         system:'You are a nutrition database. Return ONLY a JSON object, no markdown. Use standard USDA nutritional values.',
         messages:[{role:'user',content:`Nutrition facts for: "${name}" per 1 ${unit}. Return JSON: {"cal":number,"protein":number,"carbs":number,"fat":number,"unit_note":"brief clarification if needed"}`}]})
     });
@@ -667,7 +667,7 @@ async function genMeal(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:500,
         system:'You are a concise nutrition coach. Suggest ONE meal. Format: meal name, ingredients with quantities, estimated total macros (cal/protein/carbs/fat), and 2-3 sentence prep instructions. Be specific and practical.',
         messages:[{role:'user',content:`Pantry:\n${pantryList}\n\nPreferences: ${pref||'balanced, high protein'}\nGoals: ${S.goals.calories} cal, ${S.goals.protein}g protein.`}]})
     });
