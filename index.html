@@ -10,7 +10,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 .shell{display:flex;min-height:100vh}
-.sidebar{width:200px;border-right:1px solid var(--border);padding:1.5rem 1rem;flex-shrink:0;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh}
+.sidebar{width:200px;border-right:1px solid var(--border);padding:1.5rem 1rem;flex-shrink:0;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar-logo{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.02em;padding:.5rem .75rem;margin-bottom:1rem}
 .sidebar-logo span{color:var(--green)}
 .nav-item{display:flex;align-items:center;gap:8px;padding:.5rem .75rem;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border:none;background:none;width:100%;text-align:left}
@@ -75,13 +75,8 @@ button.btn-danger:hover{background:var(--red-bg)}
 .alert-green{background:var(--green-bg);border:1px solid rgba(74,222,128,.2);color:var(--green)}
 .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-/* ── Natural language bar ── */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 #nl-bar{position:fixed;bottom:0;left:200px;right:0;background:var(--bg);border-top:1px solid var(--border);padding:.75rem 1.5rem;z-index:50;display:flex;flex-direction:column;gap:6px}
-#nl-bar.expanded{padding-bottom:1rem}
 .nl-input-row{display:flex;gap:8px;align-items:center}
 #nl-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif}
 #nl-input:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 3px rgba(74,222,128,0.08)}
@@ -89,12 +84,23 @@ button.btn-danger:hover{background:var(--red-bg)}
 #nl-btn{background:var(--green);color:#0f0f0f;border-color:var(--green);font-weight:500;white-space:nowrap;flex-shrink:0}
 #nl-btn:hover{opacity:.88}
 .nl-hint{font-size:11px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap}
-.nl-hint span{cursor:pointer;transition:color .15s}
-.nl-hint span:hover{color:var(--text2)}
+.nl-hint span{cursor:pointer;transition:color .15s}.nl-hint span:hover{color:var(--text2)}
 #nl-result{font-size:12px;padding:8px 12px;border-radius:var(--radius-sm);display:none;font-family:'DM Mono',monospace}
 #nl-result.ok{background:var(--green-bg);color:var(--green);display:block}
 #nl-result.err{background:var(--red-bg);color:var(--red);display:block}
 #nl-result.loading{background:var(--bg3);color:var(--text2);display:block}
+
+/* History chart */
+.hist-bar-wrap{display:flex;align-items:flex-end;gap:3px;height:80px;margin-bottom:4px}
+.hist-bar{flex:1;border-radius:2px 2px 0 0;min-width:4px;cursor:pointer;transition:opacity .15s;position:relative}
+.hist-bar:hover{opacity:.75}
+.hist-bar.selected{outline:2px solid var(--text2);outline-offset:1px}
+.cal-heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:.5rem}
+.hm-cell{aspect-ratio:1;border-radius:3px;cursor:pointer;transition:opacity .15s}
+.hm-cell:hover{opacity:.7}
+.date-nav{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem}
+.date-nav button{padding:5px 10px;font-size:13px}
+.date-nav .date-display{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;flex:1;text-align:center}
 
 @media(max-width:640px){
   .shell{flex-direction:column}
@@ -115,7 +121,7 @@ button.btn-danger:hover{background:var(--red-bg)}
 <div id="key-screen">
   <div class="key-box">
     <h1>Macro Tracker</h1>
-    <p>Enter your Anthropic API key to enable AI features including the natural language command bar and meal generator. Your key is saved locally and only used to call Anthropic's API.<br><br>
+    <p>Enter your Anthropic API key to enable AI features including the natural language command bar and meal generator. Your key is saved locally and never sent anywhere except Anthropic's API.<br><br>
     <a href="https://console.anthropic.com" target="_blank" class="key-link">Get a free key at console.anthropic.com →</a></p>
     <input type="password" id="key-input" placeholder="sk-ant-...">
     <div style="display:flex;gap:8px">
@@ -129,6 +135,7 @@ button.btn-danger:hover{background:var(--red-bg)}
   <nav class="sidebar">
     <div class="sidebar-logo">macro<span>.</span>track</div>
     <button class="nav-item active" onclick="nav('dashboard',this)"><span class="dot"></span>Dashboard</button>
+    <button class="nav-item" onclick="nav('history',this)"><span class="dot"></span>History</button>
     <button class="nav-item" onclick="nav('log',this)"><span class="dot"></span>Daily log</button>
     <button class="nav-item" onclick="nav('pantry',this)"><span class="dot"></span>Pantry</button>
     <button class="nav-item" onclick="nav('meals',this)"><span class="dot"></span>Meals</button>
@@ -139,6 +146,7 @@ button.btn-danger:hover{background:var(--red-bg)}
   </nav>
   <main class="main">
     <div id="p-dashboard" class="page active"></div>
+    <div id="p-history" class="page"></div>
     <div id="p-log" class="page"></div>
     <div id="p-pantry" class="page"></div>
     <div id="p-meals" class="page"></div>
@@ -148,7 +156,6 @@ button.btn-danger:hover{background:var(--red-bg)}
   </main>
 </div>
 
-<!-- Natural language bar -->
 <div id="nl-bar" style="display:none">
   <div class="nl-input-row">
     <input type="text" id="nl-input" placeholder='Try: "I ate 2 eggs and a cup of oats" or "Add 32 oz chicken to pantry"' autocomplete="off">
@@ -157,7 +164,6 @@ button.btn-danger:hover{background:var(--red-bg)}
   <div class="nl-hint">
     <span onclick="nlFill('I ate 3 eggs and a scoop of protein powder')">I ate 3 eggs + protein powder</span>
     <span onclick="nlFill('Add 2 pounds of chicken breast to pantry')">Add chicken to pantry</span>
-    <span onclick="nlFill('I used 4 oz chicken and 1 cup brown rice for lunch')">Log pantry usage</span>
     <span onclick="nlFill('Set oats to 3 cups')">Set pantry qty</span>
     <span onclick="nlFill('I just bought groceries: 12 eggs, 5 cups oats, 30 oz chicken')">Restock from shopping</span>
   </div>
@@ -190,12 +196,17 @@ let aiLoading=false,aiResult='';
 let tempIngs=[];
 let addingPantry=false,addingMeal=false;
 let nlLoading=false;
+// History state
+let histViewDate=today();
+let histAddingEntry=false;
 
 function today(){return new Date().toISOString().split('T')[0]}
-function todayLog(){return S.log.filter(l=>l.date===today())}
-function todayTotals(){
-  return todayLog().reduce((a,l)=>({calories:a.calories+(+l.cal||0),protein:a.protein+(+l.protein||0),carbs:a.carbs+(+l.carbs||0),fat:a.fat+(+l.fat||0)}),{calories:0,protein:0,carbs:0,fat:0});
+function logForDate(d){return S.log.filter(l=>l.date===d)}
+function totalsForDate(d){
+  return logForDate(d).reduce((a,l)=>({calories:a.calories+(+l.cal||0),protein:a.protein+(+l.protein||0),carbs:a.carbs+(+l.carbs||0),fat:a.fat+(+l.fat||0)}),{calories:0,protein:0,carbs:0,fat:0});
 }
+function todayLog(){return logForDate(today())}
+function todayTotals(){return totalsForDate(today())}
 function pct(v,g){return Math.min(100,Math.round(v/g*100))||0}
 function barColor(p){return p>=100?'var(--red)':p>=80?'var(--amber)':'var(--green)'}
 function lowItems(){return S.pantry.filter(p=>p.qty<=p.threshold)}
@@ -207,6 +218,19 @@ function getMacros(meal){
   },{cal:0,protein:0,carbs:0,fat:0});
 }
 function fmt(n){return Math.round(+n||0)}
+function fmtDate(d){
+  const dt=new Date(d+'T12:00:00');
+  return dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+}
+function offsetDate(d,days){
+  const dt=new Date(d+'T12:00:00');
+  dt.setDate(dt.getDate()+days);
+  return dt.toISOString().split('T')[0];
+}
+function allLogDates(){
+  const dates=new Set(S.log.map(l=>l.date));
+  return Array.from(dates).sort();
+}
 
 // Key
 function saveKey(){
@@ -237,6 +261,7 @@ function renderAll(){renderPage('dashboard');}
 function renderPage(p){
   const el=document.getElementById('p-'+p);if(!el)return;
   if(p==='dashboard')el.innerHTML=buildDashboard();
+  else if(p==='history')el.innerHTML=buildHistory();
   else if(p==='log')el.innerHTML=buildLog();
   else if(p==='pantry')el.innerHTML=buildPantry();
   else if(p==='meals')el.innerHTML=buildMeals();
@@ -253,206 +278,221 @@ function navTo(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
   document.getElementById('p-'+p).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(p.replace('-',' ')))b.classList.add('active');});
+  document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(p))b.classList.add('active');});
   renderPage(p);
 }
 
-// ── Natural Language Bar ──
-function nlFill(text){
-  document.getElementById('nl-input').value=text;
-  document.getElementById('nl-input').focus();
-}
-
-function nlSetResult(msg,type){
-  const el=document.getElementById('nl-result');
-  el.textContent=msg;el.className=type;
-}
-
-document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='k'){
-    e.preventDefault();
-    document.getElementById('nl-input')?.focus();
-  }
-});
-
-document.getElementById('nl-input')?.addEventListener('keydown',e=>{
-  if(e.key==='Enter')nlSubmit();
-});
+// ── NL Bar ──
+function nlFill(text){document.getElementById('nl-input').value=text;document.getElementById('nl-input').focus();}
+function nlSetResult(msg,type){const el=document.getElementById('nl-result');el.textContent=msg;el.className=type;}
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();document.getElementById('nl-input')?.focus();}});
+document.getElementById('nl-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')nlSubmit();});
 
 async function nlSubmit(){
   if(nlLoading)return;
   const input=document.getElementById('nl-input')?.value?.trim();
   if(!input)return;
   if(!API_KEY){nlSetResult('Add your API key in Settings to use natural language commands.','err');return;}
-
-  nlLoading=true;
-  nlSetResult('Thinking...','loading');
+  nlLoading=true;nlSetResult('Thinking...','loading');
   document.getElementById('nl-btn').innerHTML='<span class="spin"></span>';
-
   const pantryContext=S.pantry.map(p=>`id:${p.id} "${p.name}" qty:${fmt(p.qty)} ${p.unit} (${p.cal}cal/${p.protein}gP/${p.carbs}gC/${p.fat}gF per ${p.unit})`).join('\n');
   const mealsContext=S.meals.map(m=>{const mac=getMacros(m);return`id:${m.id} "${m.name}" ${fmt(mac.cal)}cal/${fmt(mac.protein)}gP`;}).join('\n');
+  const systemPrompt=`You are a nutrition tracker assistant. Parse natural language food actions and return ONLY valid JSON, no markdown.
 
-  const systemPrompt=`You are a nutrition tracker assistant. The user will describe food actions in natural language. Parse them and return ONLY a valid JSON object — no markdown, no explanation.
+Current pantry:\n${pantryContext}\n\nSaved meals:\n${mealsContext||'(none)'}\n\nToday: ${today()}
 
-Current pantry:
-${pantryContext}
+Return JSON: {"actions":[...],"summary":"one sentence"}
 
-Saved meals:
-${mealsContext||'(none)'}
+Action types:
+{"type":"log_pantry","pantryId":N,"qty":N,"note":"label"}
+{"type":"log_custom","name":"STRING","cal":N,"protein":N,"carbs":N,"fat":N}
+{"type":"log_meal","mealId":N}
+{"type":"set_pantry","pantryId":N,"qty":N}
+{"type":"add_pantry","pantryId":N,"qty":N}
+{"type":"use_pantry","pantryId":N,"qty":N}
+{"type":"new_pantry","name":"STRING","unit":"STRING","qty":N,"threshold":N,"cal":N,"protein":N,"carbs":N,"fat":N}
 
-Today's date: ${today()}
-
-Return JSON with this structure:
-{
-  "actions": [
-    // One or more of these action types:
-    // Log food eaten (from pantry items):
-    {"type":"log_pantry","pantryId":NUMBER,"qty":NUMBER,"note":"optional label"}
-    // Log food eaten (custom, not in pantry):
-    {"type":"log_custom","name":"STRING","cal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER}
-    // Log a saved meal:
-    {"type":"log_meal","mealId":NUMBER}
-    // Update pantry quantity (set absolute value):
-    {"type":"set_pantry","pantryId":NUMBER,"qty":NUMBER}
-    // Add to pantry quantity:
-    {"type":"add_pantry","pantryId":NUMBER,"qty":NUMBER}
-    // Deduct from pantry (used/consumed without logging macros):
-    {"type":"use_pantry","pantryId":NUMBER,"qty":NUMBER}
-    // Add a new pantry item:
-    {"type":"new_pantry","name":"STRING","unit":"STRING","qty":NUMBER,"threshold":NUMBER,"cal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER}
-  ],
-  "summary": "One sentence plain English summary of what you did"
-}
-
-Rules:
-- Match pantry items by fuzzy name (e.g. "chicken" matches "Chicken breast")
-- For food eaten, always prefer log_pantry if it matches a pantry item, so qty is deducted
-- If qty units differ (e.g. user says "2 lbs" but pantry unit is "oz"), convert automatically (1 lb = 16 oz)
-- If a food is not in the pantry, use log_custom and estimate macros from nutritional knowledge
-- For "I ate X", use log_pantry or log_custom
-- For "Add X to pantry" or "I bought X", use add_pantry or new_pantry
-- For "Set X to Y", use set_pantry
-- For "I used X for cooking" (no eating intent), use use_pantry
-- Return ONLY the JSON object, nothing else`;
-
+Rules: fuzzy name match pantry items; convert units (1lb=16oz,1cup=8oz); for "I ate X" use log_pantry or log_custom; estimate macros from knowledge if custom; return ONLY JSON.`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:600,
-        system:systemPrompt,
-        messages:[{role:'user',content:input}]
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:systemPrompt,messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     const raw=data.content?.[0]?.text||'{}';
     let parsed;
     try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}
     catch(e){nlSetResult('Could not parse response. Try rephrasing.','err');nlLoading=false;document.getElementById('nl-btn').innerHTML='⌘ Run';return;}
-
-    const actions=parsed.actions||[];
-    let changes=[];
-
+    const actions=parsed.actions||[];let changes=[];
     for(const a of actions){
       if(a.type==='log_pantry'){
         const item=S.pantry.find(p=>p.id===a.pantryId);
-        if(item){
-          const qty=+a.qty||1;
-          S.log.push({id:'l'+S.nextId++,date:today(),name:a.note||item.name,cal:item.cal*qty,protein:item.protein*qty,carbs:item.carbs*qty,fat:item.fat*qty});
-          item.qty=Math.max(0,item.qty-qty);
-          changes.push(`Logged ${qty} ${item.unit} ${item.name}`);
-        }
+        if(item){const qty=+a.qty||1;S.log.push({id:'l'+S.nextId++,date:today(),name:a.note||item.name,cal:item.cal*qty,protein:item.protein*qty,carbs:item.carbs*qty,fat:item.fat*qty});item.qty=Math.max(0,item.qty-qty);changes.push(`Logged ${qty} ${item.unit} ${item.name}`);}
       }else if(a.type==='log_custom'){
-        S.log.push({id:'l'+S.nextId++,date:today(),name:a.name,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});
-        changes.push(`Logged ${a.name} (${fmt(a.cal)} cal)`);
+        S.log.push({id:'l'+S.nextId++,date:today(),name:a.name,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});changes.push(`Logged ${a.name} (${fmt(a.cal)} cal)`);
       }else if(a.type==='log_meal'){
         const meal=S.meals.find(m=>m.id===a.mealId);
-        if(meal){
-          const mac=getMacros(meal);
-          S.log.push({id:'l'+S.nextId++,date:today(),name:meal.name,cal:mac.cal,protein:mac.protein,carbs:mac.carbs,fat:mac.fat});
-          meal.ingredients.forEach(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);if(item)item.qty=Math.max(0,item.qty-ing.qty);});
-          changes.push(`Logged meal: ${meal.name}`);
-        }
+        if(meal){const mac=getMacros(meal);S.log.push({id:'l'+S.nextId++,date:today(),name:meal.name,cal:mac.cal,protein:mac.protein,carbs:mac.carbs,fat:mac.fat});meal.ingredients.forEach(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);if(item)item.qty=Math.max(0,item.qty-ing.qty);});changes.push(`Logged meal: ${meal.name}`);}
       }else if(a.type==='set_pantry'){
-        const item=S.pantry.find(p=>p.id===a.pantryId);
-        if(item){item.qty=+a.qty||0;changes.push(`Set ${item.name} to ${fmt(item.qty)} ${item.unit}`);}
+        const item=S.pantry.find(p=>p.id===a.pantryId);if(item){item.qty=+a.qty||0;changes.push(`Set ${item.name} to ${fmt(item.qty)} ${item.unit}`);}
       }else if(a.type==='add_pantry'){
-        const item=S.pantry.find(p=>p.id===a.pantryId);
-        if(item){item.qty+=+a.qty||0;changes.push(`Added ${fmt(a.qty)} ${item.unit} to ${item.name} (now ${fmt(item.qty)})`);}
+        const item=S.pantry.find(p=>p.id===a.pantryId);if(item){item.qty+=+a.qty||0;changes.push(`Added to ${item.name} (now ${fmt(item.qty)})`);}
       }else if(a.type==='use_pantry'){
-        const item=S.pantry.find(p=>p.id===a.pantryId);
-        if(item){item.qty=Math.max(0,item.qty-(+a.qty||0));changes.push(`Used ${fmt(a.qty)} ${item.unit} ${item.name}`);}
+        const item=S.pantry.find(p=>p.id===a.pantryId);if(item){item.qty=Math.max(0,item.qty-(+a.qty||0));changes.push(`Used ${fmt(a.qty)} ${item.unit} ${item.name}`);}
       }else if(a.type==='new_pantry'){
-        S.pantry.push({id:S.nextId++,name:a.name,unit:a.unit||'g',qty:+a.qty||0,threshold:+a.threshold||5,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});
-        changes.push(`Added ${a.name} to pantry`);
+        S.pantry.push({id:S.nextId++,name:a.name,unit:a.unit||'g',qty:+a.qty||0,threshold:+a.threshold||5,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});changes.push(`Added ${a.name} to pantry`);
       }
     }
-
     save();rerender();
     document.getElementById('nl-input').value='';
-    const summary=parsed.summary||(changes.length?changes.join(', '):'Done');
-    nlSetResult('✓ '+summary,'ok');
+    nlSetResult('✓ '+(parsed.summary||changes.join(', ')),'ok');
     setTimeout(()=>{nlSetResult('','');document.getElementById('nl-result').style.display='none';},5000);
-
-  }catch(e){
-    nlSetResult('Error: '+e.message,'err');
-  }
-  nlLoading=false;
-  document.getElementById('nl-btn').innerHTML='⌘ Run';
+  }catch(e){nlSetResult('Error: '+e.message,'err');}
+  nlLoading=false;document.getElementById('nl-btn').innerHTML='⌘ Run';
 }
 
 // Dashboard
+function hour(){const h=new Date().getHours();return h<12?'morning':h<17?'afternoon':'evening';}
 function buildDashboard(){
-  const t=todayTotals();const g=S.goals;
-  const low=lowItems();
+  const t=todayTotals();const g=S.goals;const low=lowItems();
   const dateStr=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   return`
   <div class="page-title">Good ${hour()}, Cameron</div>
   <div class="page-sub">${dateStr}</div>
   <div class="metric-row">
-    ${[
-      {label:'Calories',val:fmt(t.calories),goal:g.calories,unit:'kcal',color:'var(--blue)'},
-      {label:'Protein',val:fmt(t.protein),goal:g.protein,unit:'g',color:'var(--green)'},
-      {label:'Carbs',val:fmt(t.carbs),goal:g.carbs,unit:'g',color:'var(--amber)'},
-      {label:'Fat',val:fmt(t.fat),goal:g.fat,unit:'g',color:'var(--purple)'},
-    ].map(m=>{const p=pct(m.val,m.goal);return`<div class="metric">
-      <div class="metric-label">${m.label}</div>
-      <div class="metric-val" style="color:${m.color}">${m.val}</div>
-      <div class="metric-goal">/ ${m.goal} ${m.unit}</div>
-      <div class="bar"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div>
-    </div>`;}).join('')}
+    ${[{label:'Calories',val:fmt(t.calories),goal:g.calories,unit:'kcal',color:'var(--blue)'},{label:'Protein',val:fmt(t.protein),goal:g.protein,unit:'g',color:'var(--green)'},{label:'Carbs',val:fmt(t.carbs),goal:g.carbs,unit:'g',color:'var(--amber)'},{label:'Fat',val:fmt(t.fat),goal:g.fat,unit:'g',color:'var(--purple)'}].map(m=>{const p=pct(m.val,m.goal);return`<div class="metric"><div class="metric-label">${m.label}</div><div class="metric-val" style="color:${m.color}">${m.val}</div><div class="metric-goal">/ ${m.goal} ${m.unit}</div><div class="bar"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;}).join('')}
   </div>
-  ${low.length?`<div class="alert alert-amber">⚠ ${low.length} pantry item${low.length>1?'s':''} running low — <button class="btn-ghost" style="color:var(--amber);padding:0 4px;font-size:12px" onclick="navTo('grocery')">view list →</button></div>`:''}
+  ${low.length?`<div class="alert alert-amber">⚠ ${low.length} item${low.length>1?'s':''} running low — <button class="btn-ghost" style="color:var(--amber);padding:0 4px;font-size:12px" onclick="navTo('grocery')">view list →</button></div>`:''}
   <div class="card">
     <div class="card-title">Remaining today</div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
-      ${[
-        {label:'Calories',rem:g.calories-t.calories,color:'var(--blue)'},
-        {label:'Protein',rem:g.protein-t.protein,unit:'g',color:'var(--green)'},
-        {label:'Carbs',rem:g.carbs-t.carbs,unit:'g',color:'var(--amber)'},
-        {label:'Fat',rem:g.fat-t.fat,unit:'g',color:'var(--purple)'},
-      ].map(m=>`<div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:2px">${m.label}</div>
-        <div style="font-size:18px;font-weight:600;font-family:'DM Mono',monospace;color:${m.rem<0?'var(--red)':m.color}">${m.rem>0?'+':''}${fmt(m.rem)}${m.unit||''}</div>
-      </div>`).join('')}
+      ${[{label:'Calories',rem:g.calories-t.calories,color:'var(--blue)'},{label:'Protein',rem:g.protein-t.protein,unit:'g',color:'var(--green)'},{label:'Carbs',rem:g.carbs-t.carbs,unit:'g',color:'var(--amber)'},{label:'Fat',rem:g.fat-t.fat,unit:'g',color:'var(--purple)'}].map(m=>`<div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">${m.label}</div><div style="font-size:18px;font-weight:600;font-family:'DM Mono',monospace;color:${m.rem<0?'var(--red)':m.color}">${m.rem>0?'+':''}${fmt(m.rem)}${m.unit||''}</div></div>`).join('')}
     </div>
   </div>
   <div class="card">
     <div class="card-title">Today's log</div>
-    ${todayLog().length===0?`<div style="color:var(--text3);font-size:13px">Nothing logged yet — use the command bar below or <button class="btn-ghost" style="padding:0 4px" onclick="navTo('log')">go to log →</button></div>`:''}
-    ${todayLog().slice().reverse().slice(0,6).map(l=>`
-      <div class="item-row">
-        <div><div style="font-size:13px">${l.name}</div>
-        <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div>
-        <div style="font-size:14px;font-weight:500;font-family:'DM Mono',monospace;color:var(--blue)">${fmt(l.cal)} <span style="font-size:11px;color:var(--text3)">kcal</span></div>
-      </div>`).join('')}
+    ${todayLog().length===0?`<div style="color:var(--text3);font-size:13px">Nothing logged yet — use the command bar below.</div>`:''}
+    ${todayLog().slice().reverse().slice(0,6).map(l=>`<div class="item-row"><div><div style="font-size:13px">${l.name}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div><div style="font-size:14px;font-weight:500;font-family:'DM Mono',monospace;color:var(--blue)">${fmt(l.cal)} <span style="font-size:11px;color:var(--text3)">kcal</span></div></div>`).join('')}
   </div>`;
 }
-function hour(){const h=new Date().getHours();return h<12?'morning':h<17?'afternoon':'evening'}
 
-// Log
+// ── HISTORY ──
+function buildHistory(){
+  const isToday=histViewDate===today();
+  const isFuture=histViewDate>today();
+  const entries=logForDate(histViewDate);
+  const t=totalsForDate(histViewDate);
+  const g=S.goals;
+
+  // Build last 30 days chart data
+  const chartDays=[];
+  for(let i=29;i>=0;i--){
+    const d=offsetDate(today(),-i);
+    const tot=totalsForDate(d);
+    chartDays.push({date:d,cal:tot.calories});
+  }
+  const maxCal=Math.max(...chartDays.map(d=>d.cal),g.calories);
+
+  return`
+  <div class="page-title">History</div>
+  <div class="page-sub">Browse, edit, and track any day</div>
+
+  <div class="card">
+    <div class="card-title">Calories — last 30 days</div>
+    <div class="hist-bar-wrap" id="hist-chart">
+      ${chartDays.map(d=>{
+        const h=maxCal>0?Math.max(4,Math.round((d.cal/maxCal)*76)):4;
+        const p=pct(d.cal,g.calories);
+        const c=d.cal===0?'var(--bg3)':barColor(p);
+        const sel=d.date===histViewDate?'selected':'';
+        return`<div class="hist-bar ${sel}" style="height:${h}px;background:${c}" title="${fmtDate(d.date)}: ${fmt(d.cal)} cal" onclick="histGoTo('${d.date}')"></div>`;
+      }).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3)">
+      <span>30 days ago</span><span style="color:var(--text3);font-size:10px">goal: ${g.calories} kcal</span><span>today</span>
+    </div>
+  </div>
+
+  <div class="date-nav">
+    <button onclick="histShift(-1)">← Prev</button>
+    <div class="date-display">${isToday?'Today — ':''}${fmtDate(histViewDate)}</div>
+    <button onclick="histShift(1)" ${isToday?'disabled style="opacity:.4"':''}>Next →</button>
+    <button onclick="histGoTo('${today()}')" style="font-size:12px;${isToday?'opacity:.4':''}">Today</button>
+  </div>
+
+  <div class="metric-row">
+    ${[{label:'Calories',val:fmt(t.calories),goal:g.calories,unit:'kcal',color:'var(--blue)'},{label:'Protein',val:fmt(t.protein),goal:g.protein,unit:'g',color:'var(--green)'},{label:'Carbs',val:fmt(t.carbs),goal:g.carbs,unit:'g',color:'var(--amber)'},{label:'Fat',val:fmt(t.fat),goal:g.fat,unit:'g',color:'var(--purple)'}].map(m=>{const p=pct(m.val,m.goal);return`<div class="metric"><div class="metric-label">${m.label}</div><div class="metric-val" style="color:${m.color}">${m.val}</div><div class="metric-goal">/ ${m.goal} ${m.unit}</div><div class="bar"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div></div>`;}).join('')}
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <div class="card-title" style="margin-bottom:0">Log entries${isFuture?' (planned)':''}</div>
+      <button onclick="histToggleAdd()" style="font-size:12px">${histAddingEntry?'Cancel':'+ Add entry'}</button>
+    </div>
+
+    ${histAddingEntry?`
+    <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:.75rem;margin-bottom:1rem">
+      <div class="form-row" style="margin-bottom:6px">
+        <label>From meals</label>
+        <select id="h-meal" style="flex:1">
+          <option value="">— select —</option>
+          ${S.meals.map(m=>{const mac=getMacros(m);return`<option value="${m.id}">${m.name} (${fmt(mac.cal)} cal)</option>`}).join('')}
+        </select>
+        <button onclick="histLogMeal()" class="btn-primary" style="font-size:12px;padding:5px 10px">Log</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px">— or custom —</div>
+      <div class="form-grid" style="margin-bottom:6px">
+        <div class="form-row"><label>Name</label><input type="text" id="h-name" placeholder="Food name"></div>
+        <div class="form-row"><label>Calories</label><input type="number" id="h-cal" placeholder="0"></div>
+        <div class="form-row"><label>Protein (g)</label><input type="number" id="h-p" placeholder="0"></div>
+        <div class="form-row"><label>Carbs (g)</label><input type="number" id="h-c" placeholder="0"></div>
+        <div class="form-row"><label>Fat (g)</label><input type="number" id="h-f" placeholder="0"></div>
+      </div>
+      <button onclick="histLogCustom()" class="btn-primary" style="font-size:12px">Add custom entry</button>
+    </div>`:''}
+
+    ${entries.length===0?`<div style="color:var(--text3);font-size:13px">${isFuture?'No planned meals yet for this day.':'Nothing logged for this day.'}</div>`:''}
+    ${entries.slice().reverse().map(l=>`
+      <div class="item-row">
+        <div><div style="font-size:13px">${l.name}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-family:'DM Mono',monospace;font-size:13px;color:var(--blue)">${fmt(l.cal)} kcal</span>
+          <button class="btn-danger" onclick="histRemoveLog('${l.id}')">✕</button>
+        </div>
+      </div>`).join('')}
+  </div>
+
+  ${allLogDates().length>1?`<div class="card">
+    <div class="card-title">All logged days</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${allLogDates().slice().reverse().map(d=>{
+        const tot=totalsForDate(d);const p=pct(tot.calories,g.calories);
+        const c=tot.calories===0?'var(--bg3)':barColor(p);
+        const isSelected=d===histViewDate;
+        return`<button onclick="histGoTo('${d}')" style="font-size:11px;padding:4px 8px;background:${isSelected?c:'var(--bg3)'};border-color:${isSelected?c:'var(--border)'};color:${isSelected?'#0f0f0f':'var(--text2)'}; font-family:'DM Mono',monospace">${d.slice(5)}</button>`;
+      }).join('')}
+    </div>
+  </div>`:''}`;
+}
+
+function histGoTo(d){histViewDate=d;histAddingEntry=false;renderPage('history');}
+function histShift(n){histViewDate=offsetDate(histViewDate,n);histAddingEntry=false;renderPage('history');}
+function histToggleAdd(){histAddingEntry=!histAddingEntry;renderPage('history');}
+function histLogMeal(){
+  const id=+document.getElementById('h-meal')?.value;if(!id)return;
+  const meal=S.meals.find(m=>m.id===id);if(!meal)return;
+  const mac=getMacros(meal);
+  S.log.push({id:'l'+S.nextId++,date:histViewDate,name:meal.name,cal:mac.cal,protein:mac.protein,carbs:mac.carbs,fat:mac.fat});
+  histAddingEntry=false;save();renderPage('history');
+}
+function histLogCustom(){
+  const name=document.getElementById('h-name')?.value?.trim();if(!name)return;
+  S.log.push({id:'l'+S.nextId++,date:histViewDate,name,cal:+(document.getElementById('h-cal')?.value||0),protein:+(document.getElementById('h-p')?.value||0),carbs:+(document.getElementById('h-c')?.value||0),fat:+(document.getElementById('h-f')?.value||0)});
+  histAddingEntry=false;save();renderPage('history');
+}
+function histRemoveLog(id){S.log=S.log.filter(l=>l.id!==id);save();renderPage('history');}
+
+// Log (today only)
 function buildLog(){
   const entries=todayLog().slice().reverse();
   return`
@@ -462,10 +502,7 @@ function buildLog(){
     <div class="card-title">Log a meal</div>
     <div class="form-row">
       <label>From saved meals</label>
-      <select id="log-meal" style="flex:1">
-        <option value="">— select —</option>
-        ${S.meals.map(m=>{const mac=getMacros(m);return`<option value="${m.id}">${m.name} (${fmt(mac.cal)} cal)</option>`}).join('')}
-      </select>
+      <select id="log-meal" style="flex:1"><option value="">— select —</option>${S.meals.map(m=>{const mac=getMacros(m);return`<option value="${m.id}">${m.name} (${fmt(mac.cal)} cal)</option>`}).join('')}</select>
       <button class="btn-primary" onclick="logMeal()">Log</button>
     </div>
     <div class="divider"></div>
@@ -482,15 +519,7 @@ function buildLog(){
   <div class="card">
     <div class="card-title">Today's entries (${entries.length})</div>
     ${entries.length===0?`<div style="color:var(--text3);font-size:13px">No entries yet.</div>`:''}
-    ${entries.map(l=>`
-      <div class="item-row">
-        <div><div>${l.name}</div>
-        <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-family:'DM Mono',monospace;font-size:13px">${fmt(l.cal)} kcal</span>
-          <button class="btn-danger" onclick="removeLog('${l.id}')">✕</button>
-        </div>
-      </div>`).join('')}
+    ${entries.map(l=>`<div class="item-row"><div><div>${l.name}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div><div style="display:flex;align-items:center;gap:10px"><span style="font-family:'DM Mono',monospace;font-size:13px">${fmt(l.cal)} kcal</span><button class="btn-danger" onclick="removeLog('${l.id}')">✕</button></div></div>`).join('')}
   </div>`;
 }
 function logMeal(){
@@ -539,21 +568,17 @@ function buildPantry(){
     <button class="btn-primary" onclick="savePantry()" style="margin-top:8px">Save item</button>
   </div>`:''}
   ${low.length?`<div class="alert alert-amber" style="flex-wrap:wrap;gap:6px">⚠ Low stock: ${low.map(p=>`<span class="badge badge-amber">${p.name}</span>`).join(' ')}</div>`:''}
-  ${S.pantry.map(p=>`
-    <div class="card" style="padding:1rem">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-weight:500">${p.name}</span>
-          ${p.qty<=p.threshold?`<span class="badge badge-amber">Low</span>`:''}
-        </div>
-        <button class="btn-danger" onclick="removePantry(${p.id})">✕</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <input type="number" value="${fmt(p.qty)}" style="width:72px;font-family:'DM Mono',monospace;font-size:13px" onchange="updateQty(${p.id},+this.value)">
-        <span style="color:var(--text3);font-size:12px">${p.unit} on hand · alert at ${p.threshold}</span>
-      </div>
-      <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.cal)} kcal · ${fmt(p.protein)}g P · ${fmt(p.carbs)}g C · ${fmt(p.fat)}g F per ${p.unit}</div>
-    </div>`).join('')}`;
+  ${S.pantry.map(p=>`<div class="card" style="padding:1rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-weight:500">${p.name}</span>${p.qty<=p.threshold?`<span class="badge badge-amber">Low</span>`:''}</div>
+      <button class="btn-danger" onclick="removePantry(${p.id})">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <input type="number" value="${fmt(p.qty)}" style="width:72px;font-family:'DM Mono',monospace;font-size:13px" onchange="updateQty(${p.id},+this.value)">
+      <span style="color:var(--text3);font-size:12px">${p.unit} on hand · alert at ${p.threshold}</span>
+    </div>
+    <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.cal)} kcal · ${fmt(p.protein)}g P · ${fmt(p.carbs)}g C · ${fmt(p.fat)}g F per ${p.unit}</div>
+  </div>`).join('')}`;
 }
 function toggleAddPantry(){addingPantry=!addingPantry;rerender();}
 function savePantry(){
@@ -563,36 +588,26 @@ function savePantry(){
 }
 async function lookupNutrition(){
   if(!API_KEY){alert('Add your API key in Settings to use auto-fill.');return;}
-  const name=document.getElementById('np-name')?.value?.trim();
-  const unit=document.getElementById('np-unit')?.value?.trim()||'serving';
+  const name=document.getElementById('np-name')?.value?.trim();const unit=document.getElementById('np-unit')?.value?.trim()||'serving';
   if(!name){alert('Enter a food name first.');return;}
-  const btn=document.getElementById('np-lookup-btn');
-  const status=document.getElementById('np-lookup-status');
-  btn.innerHTML='<span class="spin" style="width:10px;height:10px;border-width:1.5px"></span> Looking up...';
-  btn.disabled=true;
+  const btn=document.getElementById('np-lookup-btn');const status=document.getElementById('np-lookup-status');
+  btn.innerHTML='<span class="spin" style="width:10px;height:10px;border-width:1.5px"></span> Looking up...';btn.disabled=true;
   status.style.display='block';status.style.color='var(--text3)';status.textContent='Fetching nutrition data...';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:200,
-        system:'You are a nutrition database. Return ONLY a JSON object, no markdown, no explanation. Use standard USDA nutritional values.',
-        messages:[{role:'user',content:`Nutrition facts for: "${name}" per 1 ${unit}. Return JSON: {"cal": number, "protein": number, "carbs": number, "fat": number, "unit_note": "brief clarification if needed"}`}]
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,
+        system:'You are a nutrition database. Return ONLY a JSON object, no markdown. Use standard USDA nutritional values.',
+        messages:[{role:'user',content:`Nutrition facts for: "${name}" per 1 ${unit}. Return JSON: {"cal":number,"protein":number,"carbs":number,"fat":number,"unit_note":"brief clarification if needed"}`}]})
     });
-    const data=await res.json();
-    const raw=data.content?.[0]?.text||'{}';
+    const data=await res.json();const raw=data.content?.[0]?.text||'{}';
     const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
     document.getElementById('np-cal').value=Math.round(parsed.cal||0);
     document.getElementById('np-p').value=+(parsed.protein||0).toFixed(1);
     document.getElementById('np-c').value=+(parsed.carbs||0).toFixed(1);
     document.getElementById('np-f').value=+(parsed.fat||0).toFixed(1);
-    status.style.color='var(--green)';
-    status.textContent='✓ Filled from nutrition data'+(parsed.unit_note?' — '+parsed.unit_note:'');
-  }catch(e){
-    status.style.color='var(--red)';status.textContent='Could not fetch — fill in manually.';
-  }
+    status.style.color='var(--green)';status.textContent='✓ Filled from nutrition data'+(parsed.unit_note?' — '+parsed.unit_note:'');
+  }catch(e){status.style.color='var(--red)';status.textContent='Could not fetch — fill manually.';}
   btn.innerHTML='✦ Auto-fill macros';btn.disabled=false;
 }
 function updateQty(id,v){const item=S.pantry.find(p=>p.id===id);if(item){item.qty=v;save();}}
@@ -611,10 +626,7 @@ function buildMeals(){
     <div class="divider"></div>
     <div class="card-title">Ingredients</div>
     <div class="form-row">
-      <select id="nm-item" style="flex:1">
-        <option value="">— select pantry item —</option>
-        ${S.pantry.map(p=>`<option value="${p.id}">${p.name} (per ${p.unit})</option>`).join('')}
-      </select>
+      <select id="nm-item" style="flex:1"><option value="">— select pantry item —</option>${S.pantry.map(p=>`<option value="${p.id}">${p.name} (per ${p.unit})</option>`).join('')}</select>
       <input type="number" id="nm-qty" placeholder="qty" style="width:70px">
       <button onclick="addIng()">Add</button>
     </div>
@@ -631,42 +643,30 @@ function buildMeals(){
     ${aiResult?`<div class="ai-response">${aiResult}</div>`:''}
     ${!API_KEY?`<div style="font-size:12px;color:var(--text3);margin-top:6px">No API key — <button class="btn-ghost" style="padding:0 4px;font-size:12px" onclick="navTo('settings')">add in settings →</button></div>`:''}
   </div>
-  ${S.meals.map(m=>{const mac=getMacros(m);return`<div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <span style="font-weight:500">${m.name}</span>
-      <button class="btn-danger" onclick="removeMeal(${m.id})">✕</button>
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:6px">${fmt(mac.cal)} kcal · ${fmt(mac.protein)}g P · ${fmt(mac.carbs)}g C · ${fmt(mac.fat)}g F</div>
-    ${m.ingredients.length?`<div style="font-size:12px;color:var(--text3)">${m.ingredients.map(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);return item?`${ing.qty} ${item.unit} ${item.name}`:'';}).filter(Boolean).join(' · ')}</div>`:''}
-  </div>`;}).join('')}`;
+  ${S.meals.map(m=>{const mac=getMacros(m);return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:500">${m.name}</span><button class="btn-danger" onclick="removeMeal(${m.id})">✕</button></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:6px">${fmt(mac.cal)} kcal · ${fmt(mac.protein)}g P · ${fmt(mac.carbs)}g C · ${fmt(mac.fat)}g F</div>${m.ingredients.length?`<div style="font-size:12px;color:var(--text3)">${m.ingredients.map(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);return item?`${ing.qty} ${item.unit} ${item.name}`:'';}).filter(Boolean).join(' · ')}</div>`:''}</div>`;}).join('')}`;
 }
 function toggleAddMeal(){addingMeal=!addingMeal;tempIngs=[];rerender();}
 function addIng(){
-  const sel=document.getElementById('nm-item');const qtyEl=document.getElementById('nm-qty');
-  if(!sel?.value)return;const qty=+(qtyEl?.value||1);
-  const item=S.pantry.find(p=>p.id===+sel.value);
+  const sel=document.getElementById('nm-item');const qtyEl=document.getElementById('nm-qty');if(!sel?.value)return;
+  const qty=+(qtyEl?.value||1);const item=S.pantry.find(p=>p.id===+sel.value);
   tempIngs.push({pantryId:+sel.value,qty});
   const prev=document.getElementById('ing-preview');
   if(prev&&item)prev.innerHTML+=`<span style="font-size:12px;color:var(--text3);margin-right:8px">${qty} ${item.unit} ${item.name}</span>`;
   qtyEl.value='';
 }
 function saveMeal(){
-  const name=document.getElementById('nm-name')?.value?.trim();
-  if(!name||!tempIngs.length)return;
-  S.meals.push({id:S.nextId++,name,ingredients:[...tempIngs]});
-  tempIngs=[];addingMeal=false;save();rerender();
+  const name=document.getElementById('nm-name')?.value?.trim();if(!name||!tempIngs.length)return;
+  S.meals.push({id:S.nextId++,name,ingredients:[...tempIngs]});tempIngs=[];addingMeal=false;save();rerender();
 }
 function removeMeal(id){S.meals=S.meals.filter(m=>m.id!==id);save();rerender();}
-
 async function genMeal(){
-  if(aiLoading)return;
-  if(!API_KEY){alert('Add your API key in Settings first.');return;}
+  if(aiLoading)return;if(!API_KEY){alert('Add your API key in Settings first.');return;}
   const pref=document.getElementById('ai-pref')?.value||'';
   const pantryList=S.pantry.filter(p=>p.qty>0).map(p=>`${p.name}: ${fmt(p.qty)} ${p.unit} (${p.cal} cal, ${p.protein}g P per ${p.unit})`).join('\n');
   aiLoading=true;aiResult='Generating...';rerender();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,
         system:'You are a concise nutrition coach. Suggest ONE meal. Format: meal name, ingredients with quantities, estimated total macros (cal/protein/carbs/fat), and 2-3 sentence prep instructions. Be specific and practical.',
         messages:[{role:'user',content:`Pantry:\n${pantryList}\n\nPreferences: ${pref||'balanced, high protein'}\nGoals: ${S.goals.calories} cal, ${S.goals.protein}g protein.`}]})
@@ -684,24 +684,11 @@ function buildPlanner(){
   <div class="page-title">Weekly planner</div>
   <div class="page-sub">Plan your meals for the week</div>
   <div class="week-grid">
-    ${DAYS.map(d=>`<div class="day-col">
-      <div class="day-label">${d}</div>
-      ${(S.week[d]||[]).map((mn,i)=>`<div class="meal-chip" title="Click to remove" onclick="removePlanMeal('${d}',${i})">${mn}</div>`).join('')}
-      <div class="day-add"><select onchange="addPlanMeal('${d}',this.value);this.value=''">
-        <option value="">+ add</option>
-        ${S.meals.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')}
-      </select></div>
-    </div>`).join('')}
+    ${DAYS.map(d=>`<div class="day-col"><div class="day-label">${d}</div>${(S.week[d]||[]).map((mn,i)=>`<div class="meal-chip" title="Click to remove" onclick="removePlanMeal('${d}',${i})">${mn}</div>`).join('')}<div class="day-add"><select onchange="addPlanMeal('${d}',this.value);this.value=''"><option value="">+ add</option>${S.meals.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')}</select></div></div>`).join('')}
   </div>
   <div class="card">
     <div class="card-title">Week summary</div>
-    ${totalMeals===0?`<div style="color:var(--text3);font-size:13px">Add meals to see weekly estimate.</div>`:`
-    <div style="display:flex;gap:24px;flex-wrap:wrap">
-      <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total calories</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal)}</div></div>
-      <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Daily avg</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal/7)}</div></div>
-      <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total protein</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalP)}g</div></div>
-      <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Meals planned</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${totalMeals}</div></div>
-    </div>`}
+    ${totalMeals===0?`<div style="color:var(--text3);font-size:13px">Add meals to see weekly estimate.</div>`:`<div style="display:flex;gap:24px;flex-wrap:wrap"><div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total calories</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal)}</div></div><div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Daily avg</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal/7)}</div></div><div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total protein</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalP)}g</div></div><div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Meals planned</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${totalMeals}</div></div></div>`}
   </div>`;
 }
 function addPlanMeal(day,mn){if(!mn)return;if(!S.week[day])S.week[day]=[];S.week[day].push(mn);save();rerender();}
@@ -711,24 +698,16 @@ function removePlanMeal(day,idx){S.week[day].splice(idx,1);save();rerender();}
 function buildGrocery(){
   const low=lowItems();
   return`
-  <div class="page-title">Grocery list</div>
-  <div class="page-sub">Auto-generated from pantry stock levels</div>
+  <div class="page-title">Grocery list</div><div class="page-sub">Auto-generated from pantry stock levels</div>
   <div class="card">
     <div class="card-title">Restock needed</div>
     ${low.length===0?`<div class="alert alert-green">✓ All pantry items are well stocked</div>`:''}
-    ${low.map(p=>`<div class="item-row">
-      <div><div>${p.name}</div>
-      <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.qty)} ${p.unit} left · alert at ${p.threshold}</div></div>
-      <span class="badge badge-amber">Buy ~${fmt(p.threshold*3-p.qty)} ${p.unit}</span>
-    </div>`).join('')}
+    ${low.map(p=>`<div class="item-row"><div><div>${p.name}</div><div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.qty)} ${p.unit} left · alert at ${p.threshold}</div></div><span class="badge badge-amber">Buy ~${fmt(p.threshold*3-p.qty)} ${p.unit}</span></div>`).join('')}
     ${low.length?`<button class="btn-primary" onclick="restockAll()" style="margin-top:12px">Mark all as restocked</button>`:''}
   </div>
   <div class="card">
     <div class="card-title">Custom items</div>
-    <div class="form-row" style="margin-bottom:8px">
-      <input type="text" id="g-custom" placeholder="e.g. Cottage cheese" style="flex:1">
-      <button onclick="addCustomGrocery()">Add</button>
-    </div>
+    <div class="form-row" style="margin-bottom:8px"><input type="text" id="g-custom" placeholder="e.g. Cottage cheese" style="flex:1"><button onclick="addCustomGrocery()">Add</button></div>
     ${(S.groceryCustom||[]).map((g,i)=>`<div class="item-row"><span>${g}</span><button class="btn-danger" onclick="removeCustomGrocery(${i})">✕</button></div>`).join('')}
   </div>`;
 }
@@ -738,9 +717,10 @@ function removeCustomGrocery(i){S.groceryCustom.splice(i,1);save();rerender();}
 
 // Settings
 function buildSettings(){
+  const dataSize=(JSON.stringify(S).length/1024).toFixed(1);
+  const logDays=[...new Set(S.log.map(l=>l.date))].length;
   return`
-  <div class="page-title">Settings</div>
-  <div class="page-sub">Goals and preferences</div>
+  <div class="page-title">Settings</div><div class="page-sub">Goals, data, and preferences</div>
   <div class="card">
     <div class="card-title">Daily goals</div>
     <div class="form-grid">
@@ -761,17 +741,54 @@ function buildSettings(){
     <div style="font-size:12px;color:var(--text3);margin-top:4px"><a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">Get a key at console.anthropic.com</a></div>
   </div>
   <div class="card">
+    <div class="card-title">Data backup</div>
+    <div style="color:var(--text2);font-size:13px;margin-bottom:12px">
+      Your data lives in browser localStorage. Download a backup regularly to protect against accidental data loss.
+      <div style="margin-top:6px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text3)">${logDays} days logged · ${S.pantry.length} pantry items · ${S.meals.length} meals · ${dataSize} KB</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-primary" onclick="downloadBackup()">↓ Download backup</button>
+      <button onclick="document.getElementById('restore-input').click()">↑ Restore from backup</button>
+      <input type="file" id="restore-input" accept=".json" style="display:none" onchange="restoreBackup(this)">
+    </div>
+    <div id="restore-status" style="font-size:12px;margin-top:8px;display:none"></div>
+  </div>
+  <div class="card">
     <div class="card-title" style="color:var(--red)">Danger zone</div>
     <button class="btn-danger" onclick="clearData()">Clear all data</button>
-    <span style="font-size:12px;color:var(--text3);margin-left:8px">Resets everything</span>
+    <span style="font-size:12px;color:var(--text3);margin-left:8px">Resets everything — download a backup first</span>
   </div>`;
 }
 function saveGoals(){
-  S.goals={calories:+(document.getElementById('g-cal')?.value||2400),protein:+(document.getElementById('g-p')?.value||180),carbs:+(document.getElementById('g-c')?.value||240),fat:+(document.getElementById('g-f')?.value||80)};
+  S.goals={calories:+(document.getElementById('g-cal')?.value||2800),protein:+(document.getElementById('g-p')?.value||180),carbs:+(document.getElementById('g-c')?.value||280),fat:+(document.getElementById('g-f')?.value||90)};
   save();rerender();alert('Goals saved!');
 }
 function updateKey(){const k=document.getElementById('s-key')?.value?.trim();if(k){API_KEY=k;localStorage.setItem('mt_key',k);alert('Key saved!');}}
-function clearData(){if(confirm('Clear all data?')){localStorage.removeItem('mt_v3');S=loadState();save();rerender();}}
+function clearData(){if(confirm('Clear all data? Download a backup first!')){localStorage.removeItem('mt_v3');S=loadState();save();rerender();}}
+
+function downloadBackup(){
+  const ts=new Date().toISOString().split('T')[0];
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`macro-tracker-backup-${ts}.json`;a.click();URL.revokeObjectURL(a.href);
+}
+function restoreBackup(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.goals||!data.pantry||!data.log)throw new Error('Invalid backup file');
+      S=data;save();rerender();
+      const el=document.getElementById('restore-status');
+      if(el){el.style.display='block';el.style.color='var(--green)';el.textContent='✓ Backup restored successfully';}
+    }catch(err){
+      const el=document.getElementById('restore-status');
+      if(el){el.style.display='block';el.style.color='var(--red)';el.textContent='Error: invalid backup file';}
+    }
+  };
+  reader.readAsText(file);input.value='';
+}
 
 // Init
 if(API_KEY){
