@@ -6,33 +6,9 @@
 <title>Macro Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0f0f0f;
-  --bg2: #171717;
-  --bg3: #1f1f1f;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --text: #f0f0f0;
-  --text2: #888;
-  --text3: #555;
-  --green: #4ade80;
-  --green-bg: rgba(74,222,128,0.1);
-  --amber: #fbbf24;
-  --amber-bg: rgba(251,191,36,0.1);
-  --red: #f87171;
-  --red-bg: rgba(248,113,113,0.1);
-  --blue: #60a5fa;
-  --blue-bg: rgba(96,165,250,0.1);
-  --purple: #a78bfa;
-  --purple-bg: rgba(167,139,250,0.1);
-  --radius: 10px;
-  --radius-sm: 6px;
-}
+:root{--bg:#0f0f0f;--bg2:#171717;--bg3:#1f1f1f;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#f0f0f0;--text2:#888;--text3:#555;--green:#4ade80;--green-bg:rgba(74,222,128,0.1);--amber:#fbbf24;--amber-bg:rgba(251,191,36,0.1);--red:#f87171;--red-bg:rgba(248,113,113,0.1);--blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);--purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);--radius:10px;--radius-sm:6px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
-code,input[type=text][class*=mono],.mono{font-family:'DM Mono',monospace}
-
-/* Layout */
 .shell{display:flex;min-height:100vh}
 .sidebar{width:200px;border-right:1px solid var(--border);padding:1.5rem 1rem;flex-shrink:0;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh}
 .sidebar-logo{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);letter-spacing:-.02em;padding:.5rem .75rem;margin-bottom:1rem}
@@ -42,19 +18,12 @@ code,input[type=text][class*=mono],.mono{font-family:'DM Mono',monospace}
 .nav-item.active{background:var(--bg3);color:var(--text);font-weight:500}
 .nav-item .dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .15s}
 .nav-item.active .dot{background:var(--green)}
-.main{flex:1;padding:2rem;max-width:860px;overflow-x:hidden}
-.page{display:none}
-.page.active{display:block}
-
-/* Typography */
+.main{flex:1;padding:2rem 2rem 6rem;max-width:860px;overflow-x:hidden}
+.page{display:none}.page.active{display:block}
 .page-title{font-size:22px;font-weight:600;letter-spacing:-.03em;margin-bottom:.25rem}
 .page-sub{color:var(--text2);font-size:13px;margin-bottom:1.75rem}
-
-/* Cards */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
 .card-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
-
-/* Metric grid */
 .metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem}
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
 .metric-label{font-size:11px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
@@ -62,14 +31,10 @@ code,input[type=text][class*=mono],.mono{font-family:'DM Mono',monospace}
 .metric-goal{font-size:11px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
 .bar{height:3px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden}
 .bar-fill{height:100%;border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1)}
-
-/* Inputs */
 input,select,textarea{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border .15s}
-input:focus,select:focus{border-color:var(--border2)}
-input::placeholder{color:var(--text3)}
+input:focus,select:focus,textarea:focus{border-color:var(--border2)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
 select option{background:var(--bg3)}
-
-/* Buttons */
 button{font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:7px 14px;border-radius:var(--radius-sm);font-size:13px;transition:all .15s}
 button:hover{border-color:var(--border2);background:var(--bg2)}
 button.btn-primary{background:var(--green);color:#0f0f0f;border-color:var(--green);font-weight:500}
@@ -78,37 +43,25 @@ button.btn-ghost{background:transparent;border-color:transparent;color:var(--tex
 button.btn-ghost:hover{color:var(--text);background:var(--bg3)}
 button.btn-danger{color:var(--red);border-color:transparent;background:transparent;padding:4px 8px}
 button.btn-danger:hover{background:var(--red-bg)}
-
-/* Badges */
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;font-family:'DM Mono',monospace}
 .badge-green{background:var(--green-bg);color:var(--green)}
 .badge-amber{background:var(--amber-bg);color:var(--amber)}
 .badge-red{background:var(--red-bg);color:var(--red)}
 .badge-blue{background:var(--blue-bg);color:var(--blue)}
 .badge-purple{background:var(--purple-bg);color:var(--purple)}
-
-/* Item rows */
 .item-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
 .item-row:last-child{border-bottom:none}
-
-/* Form layout */
 .form-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .form-row label{font-size:12px;color:var(--text2);min-width:100px;flex-shrink:0}
 .form-row input{flex:1}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-/* Week grid */
 .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1rem}
 .day-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem .5rem;min-height:100px}
 .day-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
 .meal-chip{background:var(--purple-bg);color:var(--purple);border-radius:4px;padding:2px 5px;font-size:10px;margin-bottom:3px;cursor:pointer;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meal-chip:hover{background:var(--red-bg);color:var(--red)}
 .day-add select{width:100%;background:transparent;border:1px dashed var(--border);border-radius:4px;padding:3px 4px;font-size:10px;color:var(--text3);margin-top:4px}
-
-/* AI box */
 .ai-response{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text);margin-top:1rem;font-family:'DM Mono',monospace}
-
-/* API key screen */
 #key-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100;padding:2rem}
 .key-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;max-width:460px;width:100%}
 .key-box h1{font-size:20px;font-weight:600;letter-spacing:-.03em;margin-bottom:.5rem}
@@ -116,34 +69,43 @@ button.btn-danger:hover{background:var(--red-bg)}
 .key-box input{width:100%;margin-bottom:1rem;font-family:'DM Mono',monospace;font-size:12px}
 .key-link{color:var(--blue);font-size:12px;text-decoration:none}
 .key-link:hover{text-decoration:underline}
-
-/* Divider */
 .divider{height:1px;background:var(--border);margin:1rem 0}
-
-/* Alert strip */
 .alert{display:flex;align-items:center;gap:8px;padding:.75rem 1rem;border-radius:var(--radius-sm);font-size:13px;margin-bottom:.75rem}
 .alert-amber{background:var(--amber-bg);border:1px solid rgba(251,191,36,.2);color:var(--amber)}
 .alert-green{background:var(--green-bg);border:1px solid rgba(74,222,128,.2);color:var(--green)}
-
-/* Spinner */
 .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Scrollbar */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
-/* Mobile */
+/* ── Natural language bar ── */
+#nl-bar{position:fixed;bottom:0;left:200px;right:0;background:var(--bg);border-top:1px solid var(--border);padding:.75rem 1.5rem;z-index:50;display:flex;flex-direction:column;gap:6px}
+#nl-bar.expanded{padding-bottom:1rem}
+.nl-input-row{display:flex;gap:8px;align-items:center}
+#nl-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 14px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif}
+#nl-input:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 3px rgba(74,222,128,0.08)}
+#nl-input::placeholder{color:var(--text3)}
+#nl-btn{background:var(--green);color:#0f0f0f;border-color:var(--green);font-weight:500;white-space:nowrap;flex-shrink:0}
+#nl-btn:hover{opacity:.88}
+.nl-hint{font-size:11px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap}
+.nl-hint span{cursor:pointer;transition:color .15s}
+.nl-hint span:hover{color:var(--text2)}
+#nl-result{font-size:12px;padding:8px 12px;border-radius:var(--radius-sm);display:none;font-family:'DM Mono',monospace}
+#nl-result.ok{background:var(--green-bg);color:var(--green);display:block}
+#nl-result.err{background:var(--red-bg);color:var(--red);display:block}
+#nl-result.loading{background:var(--bg3);color:var(--text2);display:block}
+
 @media(max-width:640px){
   .shell{flex-direction:column}
   .sidebar{width:100%;height:auto;flex-direction:row;flex-wrap:wrap;padding:.75rem;position:relative;gap:2px}
   .sidebar-logo{display:none}
   .nav-item{flex:1;justify-content:center;font-size:11px;padding:.4rem .5rem}
   .nav-item .dot{display:none}
-  .main{padding:1rem}
+  .main{padding:1rem 1rem 6rem}
   .metric-row{grid-template-columns:repeat(2,1fr)}
   .week-grid{grid-template-columns:repeat(4,1fr)}
+  #nl-bar{left:0}
   .form-grid{grid-template-columns:1fr}
 }
 </style>
@@ -153,7 +115,7 @@ button.btn-danger:hover{background:var(--red-bg)}
 <div id="key-screen">
   <div class="key-box">
     <h1>Macro Tracker</h1>
-    <p>Enter your Anthropic API key to enable AI meal generation. Your key is saved locally and never sent anywhere except Anthropic's API.<br><br>
+    <p>Enter your Anthropic API key to enable AI features including the natural language command bar and meal generator. Your key is saved locally and only used to call Anthropic's API.<br><br>
     <a href="https://console.anthropic.com" target="_blank" class="key-link">Get a free key at console.anthropic.com →</a></p>
     <input type="password" id="key-input" placeholder="sk-ant-...">
     <div style="display:flex;gap:8px">
@@ -173,7 +135,7 @@ button.btn-danger:hover{background:var(--red-bg)}
     <button class="nav-item" onclick="nav('planner',this)"><span class="dot"></span>Planner</button>
     <button class="nav-item" onclick="nav('grocery',this)"><span class="dot"></span>Grocery</button>
     <div style="flex:1"></div>
-    <button class="nav-item" onclick="nav('settings',this)" style="margin-top:auto"><span class="dot"></span>Settings</button>
+    <button class="nav-item" onclick="nav('settings',this)"><span class="dot"></span>Settings</button>
   </nav>
   <main class="main">
     <div id="p-dashboard" class="page active"></div>
@@ -186,9 +148,25 @@ button.btn-danger:hover{background:var(--red-bg)}
   </main>
 </div>
 
+<!-- Natural language bar -->
+<div id="nl-bar" style="display:none">
+  <div class="nl-input-row">
+    <input type="text" id="nl-input" placeholder='Try: "I ate 2 eggs and a cup of oats" or "Add 32 oz chicken to pantry"' autocomplete="off">
+    <button id="nl-btn" onclick="nlSubmit()">⌘ Run</button>
+  </div>
+  <div class="nl-hint">
+    <span onclick="nlFill('I ate 3 eggs and a scoop of protein powder')">I ate 3 eggs + protein powder</span>
+    <span onclick="nlFill('Add 2 pounds of chicken breast to pantry')">Add chicken to pantry</span>
+    <span onclick="nlFill('I used 4 oz chicken and 1 cup brown rice for lunch')">Log pantry usage</span>
+    <span onclick="nlFill('Set oats to 3 cups')">Set pantry qty</span>
+    <span onclick="nlFill('I just bought groceries: 12 eggs, 5 cups oats, 30 oz chicken')">Restock from shopping</span>
+  </div>
+  <div id="nl-result"></div>
+</div>
+
 <script>
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const DEFAULT_GOALS={calories:2400,protein:180,carbs:240,fat:80};
+const DEFAULT_GOALS={calories:2800,protein:180,carbs:280,fat:90};
 const DEFAULT_PANTRY=[
   {id:1,name:'Chicken breast',unit:'oz',qty:32,threshold:8,cal:47,protein:8.8,carbs:0,fat:1},
   {id:2,name:'Brown rice',unit:'cups',qty:4,threshold:1,cal:216,protein:5,carbs:45,fat:1.8},
@@ -211,42 +189,39 @@ let API_KEY=localStorage.getItem('mt_key')||'';
 let aiLoading=false,aiResult='';
 let tempIngs=[];
 let addingPantry=false,addingMeal=false;
-let goalEditMode=false;
-let tempGoals={...S.goals};
+let nlLoading=false;
 
 function today(){return new Date().toISOString().split('T')[0]}
 function todayLog(){return S.log.filter(l=>l.date===today())}
 function todayTotals(){
-  return todayLog().reduce((a,l)=>({
-    calories:a.calories+(+l.cal||0),protein:a.protein+(+l.protein||0),
-    carbs:a.carbs+(+l.carbs||0),fat:a.fat+(+l.fat||0)
-  }),{calories:0,protein:0,carbs:0,fat:0});
+  return todayLog().reduce((a,l)=>({calories:a.calories+(+l.cal||0),protein:a.protein+(+l.protein||0),carbs:a.carbs+(+l.carbs||0),fat:a.fat+(+l.fat||0)}),{calories:0,protein:0,carbs:0,fat:0});
 }
 function pct(v,g){return Math.min(100,Math.round(v/g*100))||0}
 function barColor(p){return p>=100?'var(--red)':p>=80?'var(--amber)':'var(--green)'}
 function lowItems(){return S.pantry.filter(p=>p.qty<=p.threshold)}
 function getMacros(meal){
-  return (meal.ingredients||[]).reduce((a,ing)=>{
+  return(meal.ingredients||[]).reduce((a,ing)=>{
     const item=S.pantry.find(p=>p.id===ing.pantryId);
     if(!item)return a;
-    return{cal:a.cal+item.cal*ing.qty,protein:a.protein+item.protein*ing.qty,
-      carbs:a.carbs+item.carbs*ing.qty,fat:a.fat+item.fat*ing.qty};
+    return{cal:a.cal+item.cal*ing.qty,protein:a.protein+item.protein*ing.qty,carbs:a.carbs+item.carbs*ing.qty,fat:a.fat+item.fat*ing.qty};
   },{cal:0,protein:0,carbs:0,fat:0});
 }
-function fmt(n){return Math.round(n)}
+function fmt(n){return Math.round(+n||0)}
 
-// Key handling
+// Key
 function saveKey(){
   const k=document.getElementById('key-input').value.trim();
   if(!k.startsWith('sk-ant-'))return alert('Key should start with sk-ant-');
   API_KEY=k;localStorage.setItem('mt_key',k);
   document.getElementById('key-screen').style.display='none';
   document.getElementById('app').style.display='flex';
+  document.getElementById('nl-bar').style.display='flex';
   renderAll();
 }
 function skipKey(){
   document.getElementById('key-screen').style.display='none';
   document.getElementById('app').style.display='flex';
+  document.getElementById('nl-bar').style.display='flex';
   renderAll();
 }
 
@@ -260,8 +235,7 @@ function nav(page,btn){
 }
 function renderAll(){renderPage('dashboard');}
 function renderPage(p){
-  const el=document.getElementById('p-'+p);
-  if(!el)return;
+  const el=document.getElementById('p-'+p);if(!el)return;
   if(p==='dashboard')el.innerHTML=buildDashboard();
   else if(p==='log')el.innerHTML=buildLog();
   else if(p==='pantry')el.innerHTML=buildPantry();
@@ -275,13 +249,166 @@ function rerender(){
     const id=p.id.replace('p-','');renderPage(id);
   });
 }
+function navTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.getElementById('p-'+p).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(p.replace('-',' ')))b.classList.add('active');});
+  renderPage(p);
+}
+
+// ── Natural Language Bar ──
+function nlFill(text){
+  document.getElementById('nl-input').value=text;
+  document.getElementById('nl-input').focus();
+}
+
+function nlSetResult(msg,type){
+  const el=document.getElementById('nl-result');
+  el.textContent=msg;el.className=type;
+}
+
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+    e.preventDefault();
+    document.getElementById('nl-input')?.focus();
+  }
+});
+
+document.getElementById('nl-input')?.addEventListener('keydown',e=>{
+  if(e.key==='Enter')nlSubmit();
+});
+
+async function nlSubmit(){
+  if(nlLoading)return;
+  const input=document.getElementById('nl-input')?.value?.trim();
+  if(!input)return;
+  if(!API_KEY){nlSetResult('Add your API key in Settings to use natural language commands.','err');return;}
+
+  nlLoading=true;
+  nlSetResult('Thinking...','loading');
+  document.getElementById('nl-btn').innerHTML='<span class="spin"></span>';
+
+  const pantryContext=S.pantry.map(p=>`id:${p.id} "${p.name}" qty:${fmt(p.qty)} ${p.unit} (${p.cal}cal/${p.protein}gP/${p.carbs}gC/${p.fat}gF per ${p.unit})`).join('\n');
+  const mealsContext=S.meals.map(m=>{const mac=getMacros(m);return`id:${m.id} "${m.name}" ${fmt(mac.cal)}cal/${fmt(mac.protein)}gP`;}).join('\n');
+
+  const systemPrompt=`You are a nutrition tracker assistant. The user will describe food actions in natural language. Parse them and return ONLY a valid JSON object — no markdown, no explanation.
+
+Current pantry:
+${pantryContext}
+
+Saved meals:
+${mealsContext||'(none)'}
+
+Today's date: ${today()}
+
+Return JSON with this structure:
+{
+  "actions": [
+    // One or more of these action types:
+    // Log food eaten (from pantry items):
+    {"type":"log_pantry","pantryId":NUMBER,"qty":NUMBER,"note":"optional label"}
+    // Log food eaten (custom, not in pantry):
+    {"type":"log_custom","name":"STRING","cal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER}
+    // Log a saved meal:
+    {"type":"log_meal","mealId":NUMBER}
+    // Update pantry quantity (set absolute value):
+    {"type":"set_pantry","pantryId":NUMBER,"qty":NUMBER}
+    // Add to pantry quantity:
+    {"type":"add_pantry","pantryId":NUMBER,"qty":NUMBER}
+    // Deduct from pantry (used/consumed without logging macros):
+    {"type":"use_pantry","pantryId":NUMBER,"qty":NUMBER}
+    // Add a new pantry item:
+    {"type":"new_pantry","name":"STRING","unit":"STRING","qty":NUMBER,"threshold":NUMBER,"cal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER}
+  ],
+  "summary": "One sentence plain English summary of what you did"
+}
+
+Rules:
+- Match pantry items by fuzzy name (e.g. "chicken" matches "Chicken breast")
+- For food eaten, always prefer log_pantry if it matches a pantry item, so qty is deducted
+- If qty units differ (e.g. user says "2 lbs" but pantry unit is "oz"), convert automatically (1 lb = 16 oz)
+- If a food is not in the pantry, use log_custom and estimate macros from nutritional knowledge
+- For "I ate X", use log_pantry or log_custom
+- For "Add X to pantry" or "I bought X", use add_pantry or new_pantry
+- For "Set X to Y", use set_pantry
+- For "I used X for cooking" (no eating intent), use use_pantry
+- Return ONLY the JSON object, nothing else`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system:systemPrompt,
+        messages:[{role:'user',content:input}]
+      })
+    });
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'{}';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}
+    catch(e){nlSetResult('Could not parse response. Try rephrasing.','err');nlLoading=false;document.getElementById('nl-btn').innerHTML='⌘ Run';return;}
+
+    const actions=parsed.actions||[];
+    let changes=[];
+
+    for(const a of actions){
+      if(a.type==='log_pantry'){
+        const item=S.pantry.find(p=>p.id===a.pantryId);
+        if(item){
+          const qty=+a.qty||1;
+          S.log.push({id:'l'+S.nextId++,date:today(),name:a.note||item.name,cal:item.cal*qty,protein:item.protein*qty,carbs:item.carbs*qty,fat:item.fat*qty});
+          item.qty=Math.max(0,item.qty-qty);
+          changes.push(`Logged ${qty} ${item.unit} ${item.name}`);
+        }
+      }else if(a.type==='log_custom'){
+        S.log.push({id:'l'+S.nextId++,date:today(),name:a.name,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});
+        changes.push(`Logged ${a.name} (${fmt(a.cal)} cal)`);
+      }else if(a.type==='log_meal'){
+        const meal=S.meals.find(m=>m.id===a.mealId);
+        if(meal){
+          const mac=getMacros(meal);
+          S.log.push({id:'l'+S.nextId++,date:today(),name:meal.name,cal:mac.cal,protein:mac.protein,carbs:mac.carbs,fat:mac.fat});
+          meal.ingredients.forEach(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);if(item)item.qty=Math.max(0,item.qty-ing.qty);});
+          changes.push(`Logged meal: ${meal.name}`);
+        }
+      }else if(a.type==='set_pantry'){
+        const item=S.pantry.find(p=>p.id===a.pantryId);
+        if(item){item.qty=+a.qty||0;changes.push(`Set ${item.name} to ${fmt(item.qty)} ${item.unit}`);}
+      }else if(a.type==='add_pantry'){
+        const item=S.pantry.find(p=>p.id===a.pantryId);
+        if(item){item.qty+=+a.qty||0;changes.push(`Added ${fmt(a.qty)} ${item.unit} to ${item.name} (now ${fmt(item.qty)})`);}
+      }else if(a.type==='use_pantry'){
+        const item=S.pantry.find(p=>p.id===a.pantryId);
+        if(item){item.qty=Math.max(0,item.qty-(+a.qty||0));changes.push(`Used ${fmt(a.qty)} ${item.unit} ${item.name}`);}
+      }else if(a.type==='new_pantry'){
+        S.pantry.push({id:S.nextId++,name:a.name,unit:a.unit||'g',qty:+a.qty||0,threshold:+a.threshold||5,cal:+a.cal||0,protein:+a.protein||0,carbs:+a.carbs||0,fat:+a.fat||0});
+        changes.push(`Added ${a.name} to pantry`);
+      }
+    }
+
+    save();rerender();
+    document.getElementById('nl-input').value='';
+    const summary=parsed.summary||(changes.length?changes.join(', '):'Done');
+    nlSetResult('✓ '+summary,'ok');
+    setTimeout(()=>{nlSetResult('','');document.getElementById('nl-result').style.display='none';},5000);
+
+  }catch(e){
+    nlSetResult('Error: '+e.message,'err');
+  }
+  nlLoading=false;
+  document.getElementById('nl-btn').innerHTML='⌘ Run';
+}
 
 // Dashboard
 function buildDashboard(){
   const t=todayTotals();const g=S.goals;
   const low=lowItems();
   const dateStr=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  return `
+  return`
   <div class="page-title">Good ${hour()}, Cameron</div>
   <div class="page-sub">${dateStr}</div>
   <div class="metric-row">
@@ -290,17 +417,14 @@ function buildDashboard(){
       {label:'Protein',val:fmt(t.protein),goal:g.protein,unit:'g',color:'var(--green)'},
       {label:'Carbs',val:fmt(t.carbs),goal:g.carbs,unit:'g',color:'var(--amber)'},
       {label:'Fat',val:fmt(t.fat),goal:g.fat,unit:'g',color:'var(--purple)'},
-    ].map(m=>{
-      const p=pct(m.val,m.goal);
-      return `<div class="metric">
-        <div class="metric-label">${m.label}</div>
-        <div class="metric-val" style="color:${m.color}">${m.val}</div>
-        <div class="metric-goal">/ ${m.goal} ${m.unit}</div>
-        <div class="bar"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div>
-      </div>`;
-    }).join('')}
+    ].map(m=>{const p=pct(m.val,m.goal);return`<div class="metric">
+      <div class="metric-label">${m.label}</div>
+      <div class="metric-val" style="color:${m.color}">${m.val}</div>
+      <div class="metric-goal">/ ${m.goal} ${m.unit}</div>
+      <div class="bar"><div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div></div>
+    </div>`;}).join('')}
   </div>
-  ${low.length?`<div class="alert alert-amber">⚠ ${low.length} pantry item${low.length>1?'s are':' is'} running low — <button class="btn-ghost" style="color:var(--amber);padding:0 4px;font-size:12px" onclick="navTo('grocery')">view grocery list →</button></div>`:''}
+  ${low.length?`<div class="alert alert-amber">⚠ ${low.length} pantry item${low.length>1?'s':''} running low — <button class="btn-ghost" style="color:var(--amber);padding:0 4px;font-size:12px" onclick="navTo('grocery')">view list →</button></div>`:''}
   <div class="card">
     <div class="card-title">Remaining today</div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
@@ -317,32 +441,21 @@ function buildDashboard(){
   </div>
   <div class="card">
     <div class="card-title">Today's log</div>
-    ${todayLog().length===0?`<div style="color:var(--text3);font-size:13px">Nothing logged yet. <button class="btn-ghost" style="padding:0 4px" onclick="navTo('log')">Log food →</button></div>`:''}
+    ${todayLog().length===0?`<div style="color:var(--text3);font-size:13px">Nothing logged yet — use the command bar below or <button class="btn-ghost" style="padding:0 4px" onclick="navTo('log')">go to log →</button></div>`:''}
     ${todayLog().slice().reverse().slice(0,6).map(l=>`
       <div class="item-row">
-        <div>
-          <div style="font-size:13px">${l.name}</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div>
-        </div>
+        <div><div style="font-size:13px">${l.name}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div>
         <div style="font-size:14px;font-weight:500;font-family:'DM Mono',monospace;color:var(--blue)">${fmt(l.cal)} <span style="font-size:11px;color:var(--text3)">kcal</span></div>
-      </div>
-    `).join('')}
+      </div>`).join('')}
   </div>`;
 }
-
 function hour(){const h=new Date().getHours();return h<12?'morning':h<17?'afternoon':'evening'}
-function navTo(p){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-  document.getElementById('p-'+p).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(p.replace('-',' ')))b.classList.add('active');});
-  renderPage(p);
-}
 
 // Log
 function buildLog(){
   const entries=todayLog().slice().reverse();
-  return `
+  return`
   <div class="page-title">Daily log</div>
   <div class="page-sub">Track what you eat today</div>
   <div class="card">
@@ -371,37 +484,26 @@ function buildLog(){
     ${entries.length===0?`<div style="color:var(--text3);font-size:13px">No entries yet.</div>`:''}
     ${entries.map(l=>`
       <div class="item-row">
-        <div>
-          <div>${l.name}</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div>
-        </div>
+        <div><div>${l.name}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(l.protein)}g P · ${fmt(l.carbs)}g C · ${fmt(l.fat)}g F</div></div>
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-family:'DM Mono',monospace;font-size:13px">${fmt(l.cal)} kcal</span>
           <button class="btn-danger" onclick="removeLog('${l.id}')">✕</button>
         </div>
-      </div>
-    `).join('')}
+      </div>`).join('')}
   </div>`;
 }
 function logMeal(){
-  const id=+document.getElementById('log-meal').value;
-  if(!id)return;
+  const id=+document.getElementById('log-meal').value;if(!id)return;
   const meal=S.meals.find(m=>m.id===id);if(!meal)return;
   const mac=getMacros(meal);
   S.log.push({id:'l'+S.nextId++,date:today(),name:meal.name,cal:mac.cal,protein:mac.protein,carbs:mac.carbs,fat:mac.fat});
-  meal.ingredients.forEach(ing=>{
-    const item=S.pantry.find(p=>p.id===ing.pantryId);
-    if(item)item.qty=Math.max(0,item.qty-ing.qty);
-  });
+  meal.ingredients.forEach(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);if(item)item.qty=Math.max(0,item.qty-ing.qty);});
   save();rerender();
 }
 function logCustom(){
   const name=document.getElementById('cl-name')?.value?.trim();if(!name)return;
-  S.log.push({id:'l'+S.nextId++,date:today(),name,
-    cal:+(document.getElementById('cl-cal')?.value||0),
-    protein:+(document.getElementById('cl-p')?.value||0),
-    carbs:+(document.getElementById('cl-c')?.value||0),
-    fat:+(document.getElementById('cl-f')?.value||0)});
+  S.log.push({id:'l'+S.nextId++,date:today(),name,cal:+(document.getElementById('cl-cal')?.value||0),protein:+(document.getElementById('cl-p')?.value||0),carbs:+(document.getElementById('cl-c')?.value||0),fat:+(document.getElementById('cl-f')?.value||0)});
   save();rerender();
 }
 function removeLog(id){S.log=S.log.filter(l=>l.id!==id);save();rerender();}
@@ -409,7 +511,7 @@ function removeLog(id){S.log=S.log.filter(l=>l.id!==id);save();rerender();}
 // Pantry
 function buildPantry(){
   const low=lowItems();
-  return `
+  return`
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem">
     <div><div class="page-title">Pantry</div><div class="page-sub">${S.pantry.length} items tracked</div></div>
     <button onclick="toggleAddPantry()">${addingPantry?'Cancel':'+ Add item'}</button>
@@ -423,7 +525,11 @@ function buildPantry(){
       <div class="form-row"><label>Low alert at</label><input type="number" id="np-thr" placeholder="5"></div>
     </div>
     <div class="divider"></div>
-    <div class="card-title">Macros per 1 unit</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+      <div class="card-title" style="margin-bottom:0">Macros per 1 unit</div>
+      <button id="np-lookup-btn" onclick="lookupNutrition()" style="font-size:12px;color:var(--blue);border-color:rgba(96,165,250,0.3);background:var(--blue-bg);padding:4px 10px">✦ Auto-fill macros</button>
+    </div>
+    <div id="np-lookup-status" style="font-size:12px;margin-bottom:8px;display:none"></div>
     <div class="form-grid">
       <div class="form-row"><label>Calories</label><input type="number" id="np-cal" placeholder="0"></div>
       <div class="form-row"><label>Protein (g)</label><input type="number" id="np-p" placeholder="0"></div>
@@ -447,24 +553,54 @@ function buildPantry(){
         <span style="color:var(--text3);font-size:12px">${p.unit} on hand · alert at ${p.threshold}</span>
       </div>
       <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.cal)} kcal · ${fmt(p.protein)}g P · ${fmt(p.carbs)}g C · ${fmt(p.fat)}g F per ${p.unit}</div>
-    </div>
-  `).join('')}`;
+    </div>`).join('')}`;
 }
 function toggleAddPantry(){addingPantry=!addingPantry;rerender();}
 function savePantry(){
   const name=document.getElementById('np-name')?.value?.trim();if(!name)return;
-  S.pantry.push({id:S.nextId++,name,unit:document.getElementById('np-unit')?.value||'g',
-    qty:+(document.getElementById('np-qty')?.value||0),threshold:+(document.getElementById('np-thr')?.value||5),
-    cal:+(document.getElementById('np-cal')?.value||0),protein:+(document.getElementById('np-p')?.value||0),
-    carbs:+(document.getElementById('np-c')?.value||0),fat:+(document.getElementById('np-f')?.value||0)});
+  S.pantry.push({id:S.nextId++,name,unit:document.getElementById('np-unit')?.value||'g',qty:+(document.getElementById('np-qty')?.value||0),threshold:+(document.getElementById('np-thr')?.value||5),cal:+(document.getElementById('np-cal')?.value||0),protein:+(document.getElementById('np-p')?.value||0),carbs:+(document.getElementById('np-c')?.value||0),fat:+(document.getElementById('np-f')?.value||0)});
   addingPantry=false;save();rerender();
+}
+async function lookupNutrition(){
+  if(!API_KEY){alert('Add your API key in Settings to use auto-fill.');return;}
+  const name=document.getElementById('np-name')?.value?.trim();
+  const unit=document.getElementById('np-unit')?.value?.trim()||'serving';
+  if(!name){alert('Enter a food name first.');return;}
+  const btn=document.getElementById('np-lookup-btn');
+  const status=document.getElementById('np-lookup-status');
+  btn.innerHTML='<span class="spin" style="width:10px;height:10px;border-width:1.5px"></span> Looking up...';
+  btn.disabled=true;
+  status.style.display='block';status.style.color='var(--text3)';status.textContent='Fetching nutrition data...';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:200,
+        system:'You are a nutrition database. Return ONLY a JSON object, no markdown, no explanation. Use standard USDA nutritional values.',
+        messages:[{role:'user',content:`Nutrition facts for: "${name}" per 1 ${unit}. Return JSON: {"cal": number, "protein": number, "carbs": number, "fat": number, "unit_note": "brief clarification if needed"}`}]
+      })
+    });
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'{}';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    document.getElementById('np-cal').value=Math.round(parsed.cal||0);
+    document.getElementById('np-p').value=+(parsed.protein||0).toFixed(1);
+    document.getElementById('np-c').value=+(parsed.carbs||0).toFixed(1);
+    document.getElementById('np-f').value=+(parsed.fat||0).toFixed(1);
+    status.style.color='var(--green)';
+    status.textContent='✓ Filled from nutrition data'+(parsed.unit_note?' — '+parsed.unit_note:'');
+  }catch(e){
+    status.style.color='var(--red)';status.textContent='Could not fetch — fill in manually.';
+  }
+  btn.innerHTML='✦ Auto-fill macros';btn.disabled=false;
 }
 function updateQty(id,v){const item=S.pantry.find(p=>p.id===id);if(item){item.qty=v;save();}}
 function removePantry(id){S.pantry=S.pantry.filter(p=>p.id!==id);save();rerender();}
 
 // Meals
 function buildMeals(){
-  return `
+  return`
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem">
     <div><div class="page-title">Meals</div><div class="page-sub">${S.meals.length} saved meals</div></div>
     <button onclick="toggleAddMeal()">${addingMeal?'Cancel':'+ Create meal'}</button>
@@ -487,34 +623,27 @@ function buildMeals(){
   </div>`:''}
   <div class="card">
     <div class="card-title">AI meal generator</div>
-    <div style="color:var(--text2);font-size:13px;margin-bottom:10px">Claude will suggest a meal based on your current pantry.</div>
+    <div style="color:var(--text2);font-size:13px;margin-bottom:10px">Claude suggests a meal based on your current pantry.</div>
     <div class="form-row">
       <input type="text" id="ai-pref" placeholder="Any preferences? (e.g. high protein, quick prep, under 600 cal)" style="flex:1">
       <button onclick="genMeal()">${aiLoading?`<span class="spin"></span>`:'✦ Generate'}</button>
     </div>
     ${aiResult?`<div class="ai-response">${aiResult}</div>`:''}
-    ${!API_KEY?`<div style="font-size:12px;color:var(--text3);margin-top:6px">No API key set — <button class="btn-ghost" style="padding:0 4px;font-size:12px" onclick="navTo('settings')">add in settings →</button></div>`:''}
+    ${!API_KEY?`<div style="font-size:12px;color:var(--text3);margin-top:6px">No API key — <button class="btn-ghost" style="padding:0 4px;font-size:12px" onclick="navTo('settings')">add in settings →</button></div>`:''}
   </div>
-  ${S.meals.map(m=>{
-    const mac=getMacros(m);
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-weight:500">${m.name}</span>
-        <button class="btn-danger" onclick="removeMeal(${m.id})">✕</button>
-      </div>
-      <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:6px">${fmt(mac.cal)} kcal · ${fmt(mac.protein)}g P · ${fmt(mac.carbs)}g C · ${fmt(mac.fat)}g F</div>
-      ${m.ingredients.length?`<div style="font-size:12px;color:var(--text3)">${m.ingredients.map(ing=>{
-        const item=S.pantry.find(p=>p.id===ing.pantryId);
-        return item?`${ing.qty} ${item.unit} ${item.name}`:'';
-      }).filter(Boolean).join(' · ')}</div>`:''}
-    </div>`;
-  }).join('')}`;
+  ${S.meals.map(m=>{const mac=getMacros(m);return`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-weight:500">${m.name}</span>
+      <button class="btn-danger" onclick="removeMeal(${m.id})">✕</button>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:6px">${fmt(mac.cal)} kcal · ${fmt(mac.protein)}g P · ${fmt(mac.carbs)}g C · ${fmt(mac.fat)}g F</div>
+    ${m.ingredients.length?`<div style="font-size:12px;color:var(--text3)">${m.ingredients.map(ing=>{const item=S.pantry.find(p=>p.id===ing.pantryId);return item?`${ing.qty} ${item.unit} ${item.name}`:'';}).filter(Boolean).join(' · ')}</div>`:''}
+  </div>`;}).join('')}`;
 }
 function toggleAddMeal(){addingMeal=!addingMeal;tempIngs=[];rerender();}
 function addIng(){
   const sel=document.getElementById('nm-item');const qtyEl=document.getElementById('nm-qty');
-  if(!sel?.value)return;
-  const qty=+(qtyEl?.value||1);
+  if(!sel?.value)return;const qty=+(qtyEl?.value||1);
   const item=S.pantry.find(p=>p.id===+sel.value);
   tempIngs.push({pantryId:+sel.value,qty});
   const prev=document.getElementById('ing-preview');
@@ -537,16 +666,12 @@ async function genMeal(){
   aiLoading=true;aiResult='Generating...';rerender();
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:500,
+      method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,
         system:'You are a concise nutrition coach. Suggest ONE meal. Format: meal name, ingredients with quantities, estimated total macros (cal/protein/carbs/fat), and 2-3 sentence prep instructions. Be specific and practical.',
-        messages:[{role:'user',content:`Available pantry:\n${pantryList}\n\nPreferences: ${pref||'balanced, high protein'}\nDaily goals: ${S.goals.calories} cal, ${S.goals.protein}g protein, ${S.goals.carbs}g carbs, ${S.goals.fat}g fat.`}]
-      })
+        messages:[{role:'user',content:`Pantry:\n${pantryList}\n\nPreferences: ${pref||'balanced, high protein'}\nGoals: ${S.goals.calories} cal, ${S.goals.protein}g protein.`}]})
     });
-    const data=await res.json();
-    aiResult=data.content?.[0]?.text||'No response received.';
+    const data=await res.json();aiResult=data.content?.[0]?.text||'No response.';
   }catch(e){aiResult='Error: '+e.message;}
   aiLoading=false;rerender();
 }
@@ -555,24 +680,22 @@ async function genMeal(){
 function buildPlanner(){
   let totalCal=0,totalP=0,totalMeals=0;
   DAYS.forEach(d=>{(S.week[d]||[]).forEach(mn=>{const meal=S.meals.find(m=>m.name===mn);if(meal){const mac=getMacros(meal);totalCal+=mac.cal;totalP+=mac.protein;totalMeals++;}});});
-  return `
+  return`
   <div class="page-title">Weekly planner</div>
   <div class="page-sub">Plan your meals for the week</div>
   <div class="week-grid">
-    ${DAYS.map(d=>`
-      <div class="day-col">
-        <div class="day-label">${d}</div>
-        ${(S.week[d]||[]).map((mn,i)=>`<div class="meal-chip" title="Click to remove" onclick="removePlanMeal('${d}',${i})">${mn}</div>`).join('')}
-        <div class="day-add"><select onchange="addPlanMeal('${d}',this.value);this.value=''">
-          <option value="">+ add</option>
-          ${S.meals.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')}
-        </select></div>
-      </div>
-    `).join('')}
+    ${DAYS.map(d=>`<div class="day-col">
+      <div class="day-label">${d}</div>
+      ${(S.week[d]||[]).map((mn,i)=>`<div class="meal-chip" title="Click to remove" onclick="removePlanMeal('${d}',${i})">${mn}</div>`).join('')}
+      <div class="day-add"><select onchange="addPlanMeal('${d}',this.value);this.value=''">
+        <option value="">+ add</option>
+        ${S.meals.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')}
+      </select></div>
+    </div>`).join('')}
   </div>
   <div class="card">
     <div class="card-title">Week summary</div>
-    ${totalMeals===0?`<div style="color:var(--text3);font-size:13px">Add meals to your plan to see the weekly estimate.</div>`:`
+    ${totalMeals===0?`<div style="color:var(--text3);font-size:13px">Add meals to see weekly estimate.</div>`:`
     <div style="display:flex;gap:24px;flex-wrap:wrap">
       <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Total calories</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal)}</div></div>
       <div><div style="font-size:11px;color:var(--text3);margin-bottom:2px">Daily avg</div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600">${fmt(totalCal/7)}</div></div>
@@ -587,21 +710,17 @@ function removePlanMeal(day,idx){S.week[day].splice(idx,1);save();rerender();}
 // Grocery
 function buildGrocery(){
   const low=lowItems();
-  return `
+  return`
   <div class="page-title">Grocery list</div>
   <div class="page-sub">Auto-generated from pantry stock levels</div>
   <div class="card">
     <div class="card-title">Restock needed</div>
     ${low.length===0?`<div class="alert alert-green">✓ All pantry items are well stocked</div>`:''}
-    ${low.map(p=>`
-      <div class="item-row">
-        <div>
-          <div>${p.name}</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.qty)} ${p.unit} remaining · threshold ${p.threshold} ${p.unit}</div>
-        </div>
-        <span class="badge badge-amber">Buy ~${fmt(p.threshold*3-p.qty)} ${p.unit}</span>
-      </div>
-    `).join('')}
+    ${low.map(p=>`<div class="item-row">
+      <div><div>${p.name}</div>
+      <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">${fmt(p.qty)} ${p.unit} left · alert at ${p.threshold}</div></div>
+      <span class="badge badge-amber">Buy ~${fmt(p.threshold*3-p.qty)} ${p.unit}</span>
+    </div>`).join('')}
     ${low.length?`<button class="btn-primary" onclick="restockAll()" style="margin-top:12px">Mark all as restocked</button>`:''}
   </div>
   <div class="card">
@@ -610,9 +729,7 @@ function buildGrocery(){
       <input type="text" id="g-custom" placeholder="e.g. Cottage cheese" style="flex:1">
       <button onclick="addCustomGrocery()">Add</button>
     </div>
-    ${(S.groceryCustom||[]).map((g,i)=>`
-      <div class="item-row"><span>${g}</span><button class="btn-danger" onclick="removeCustomGrocery(${i})">✕</button></div>
-    `).join('')}
+    ${(S.groceryCustom||[]).map((g,i)=>`<div class="item-row"><span>${g}</span><button class="btn-danger" onclick="removeCustomGrocery(${i})">✕</button></div>`).join('')}
   </div>`;
 }
 function restockAll(){S.pantry.forEach(p=>{if(p.qty<=p.threshold)p.qty=p.threshold*3;});save();rerender();}
@@ -621,7 +738,7 @@ function removeCustomGrocery(i){S.groceryCustom.splice(i,1);save();rerender();}
 
 // Settings
 function buildSettings(){
-  return `
+  return`
   <div class="page-title">Settings</div>
   <div class="page-sub">Goals and preferences</div>
   <div class="card">
@@ -636,17 +753,17 @@ function buildSettings(){
   </div>
   <div class="card">
     <div class="card-title">Anthropic API key</div>
-    <div style="color:var(--text2);font-size:13px;margin-bottom:10px">Required for AI meal generation. Only used to call Anthropic's API.</div>
+    <div style="color:var(--text2);font-size:13px;margin-bottom:10px">Powers the natural language bar and AI meal generator.</div>
     <div class="form-row">
       <input type="password" id="s-key" value="${API_KEY}" placeholder="sk-ant-..." style="flex:1;font-family:'DM Mono',monospace;font-size:12px">
       <button onclick="updateKey()">Save</button>
     </div>
-    <div style="font-size:12px;color:var(--text3);margin-top:4px"><a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">Get a key at console.anthropic.com</a> — the AI meal generator costs fractions of a cent per use.</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px"><a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">Get a key at console.anthropic.com</a></div>
   </div>
   <div class="card">
     <div class="card-title" style="color:var(--red)">Danger zone</div>
     <button class="btn-danger" onclick="clearData()">Clear all data</button>
-    <span style="font-size:12px;color:var(--text3);margin-left:8px">Resets pantry, meals, log, and planner</span>
+    <span style="font-size:12px;color:var(--text3);margin-left:8px">Resets everything</span>
   </div>`;
 }
 function saveGoals(){
@@ -660,6 +777,7 @@ function clearData(){if(confirm('Clear all data?')){localStorage.removeItem('mt_
 if(API_KEY){
   document.getElementById('key-screen').style.display='none';
   document.getElementById('app').style.display='flex';
+  document.getElementById('nl-bar').style.display='flex';
   renderAll();
 }
 </script>
